@@ -20,7 +20,14 @@ public class MoveLeft : MonoBehaviour
         // Move left
         if (!playerControllerScript.gameOver)
         {
-            transform.Translate(Vector3.left * speed * Time.deltaTime);
+            if (playerControllerScript.doubleSpeed)
+            {
+                transform.Translate(Vector3.left * speed * 2 * Time.deltaTime);
+            }
+            else
+            {
+                transform.Translate(Vector3.left * speed * Time.deltaTime);
+            }
         }
 
         // Destroy out of bounds obstacles

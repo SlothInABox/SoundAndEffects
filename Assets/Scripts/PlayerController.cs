@@ -6,9 +6,12 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody playerRb;
     public float jumpForce;
+    public float doubleJumpForce;
     public float gravityModifier;
+    public bool doubleSpeed = false;
 
     public bool isOnGround = true;
+    public bool doubleJumpUsed = false;
     public bool gameOver = false;
 
     private Animator playerAnim;
@@ -45,6 +48,27 @@ public class PlayerController : MonoBehaviour
             playerAnim.SetTrigger("Jump_trig");
             dirtParticle.Stop();
             playerAudio.PlayOneShot(jumpSound, 1.0f);
+            doubleJumpUsed = false;
+        }
+        else if (Input.GetKeyDown(KeyCode.Space) && !isOnGround && !doubleJumpUsed && !gameOver)
+        {
+            doubleJumpUsed = true;
+            playerRb.velocity = Vector3.zero;
+            playerRb.AddForce(Vector3.up * doubleJumpForce, ForceMode.Impulse);
+            playerAnim.Play("Running_Jump", 3, 0f);
+            playerAudio.PlayOneShot(jumpSound, 1.0f);
+        }
+
+        // Double speed when shift key held
+        if (Input.GetKey(KeyCode.LeftShift) && !gameOver)
+        {
+            doubleSpeed = true;
+            playerAnim.SetFloat("Speed_Multiplier", 2.0f);
+        }
+        else if (doubleSpeed)
+        {
+            doubleSpeed = false;
+            playerAnim.SetFloat("Speed_Multiplier", 1.0f);
         }
     }
 
